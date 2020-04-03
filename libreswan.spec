@@ -20,11 +20,13 @@
 
 Name:             libreswan
 Version:          3.25
-Release:          5
+Release:          6
 Summary:          A free implementation of IPsec & IKE for Linux
 License:          GPLv2
 Url:              https://libreswan.org/
 Source0:          https://download.libreswan.org/%{name}-%{version}.tar.gz
+Source1:          openeuler-libreswan-sysctl.conf
+Source2:          openeuler-libreswan-tmpfiles.conf
 
 Patch0001:        libreswan-3.25-relax-delete.patch
 Patch0002:        libreswan-3.25-unbound-hook.patch
@@ -87,9 +89,9 @@ FS=$(pwd)
 install -d -m 0700 %{buildroot}{%{_rundir}/pluto,%{_localstatedir}/log/pluto/peer}
 install -d %{buildroot}{%{_sbindir},%{_tmpfilesdir},%{_libdir}/fipscheck,%{_sysconfdir}/sysctl.d}
 
-install -m 0644 packaging/fedora/libreswan-sysctl.conf %{buildroot}%{_sysconfdir}/sysctl.d/50-libreswan.conf
+install -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/sysctl.d/50-libreswan.conf
 
-install -m 0644 packaging/fedora/libreswan-tmpfiles.conf %{buildroot}%{_tmpfilesdir}/libreswan.conf
+install -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/libreswan.conf
 
 echo "include %{_sysconfdir}/ipsec.d/*.secrets" > %{buildroot}%{_sysconfdir}/ipsec.secrets
 
@@ -128,6 +130,9 @@ export NSS_DISABLE_HW_GCM=1
 %doc %{_mandir}/*/*
 
 %changelog
+* Fri Apr 03 2020 Jiangping Hu <hujp1985@foxmail.com> - 3.25-6
+- Add config files
+
 * Mon Oct 28 2019 yanzhihua <yanzhihua4@huawei.com> - 3.25-4
 - Package init
 
