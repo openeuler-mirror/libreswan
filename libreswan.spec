@@ -20,11 +20,11 @@
 
 Name:             libreswan
 Version:          3.25
-Release:          6
+Release:          7
 Summary:          A free implementation of IPsec & IKE for Linux
 License:          GPLv2
-Url:              https://libreswan.org/
-Source0:          https://download.libreswan.org/%{name}-%{version}.tar.gz
+Url:              https://github.com/libreswan/libreswan
+Source0:          https://github.com/libreswan/libreswan/archive/v%{version}.tar.gz
 Source1:          openeuler-libreswan-sysctl.conf
 Source2:          openeuler-libreswan-tmpfiles.conf
 
@@ -130,6 +130,9 @@ export NSS_DISABLE_HW_GCM=1
 %doc %{_mandir}/*/*
 
 %changelog
+* Mon Sep 14 2020 Ge Wang <wangge20@huawei.com> - 3.25-7
+- Modify Source0 Url
+
 * Fri Apr 03 2020 Jiangping Hu <hujp1985@foxmail.com> - 3.25-6
 - Add config files
 
