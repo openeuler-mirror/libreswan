@@ -20,7 +20,7 @@
 
 Name:             libreswan
 Version:          3.25
-Release:          7
+Release:          8
 Summary:          A free implementation of IPsec & IKE for Linux
 License:          GPLv2
 Url:              https://github.com/libreswan/libreswan
@@ -30,6 +30,8 @@ Source2:          openeuler-libreswan-tmpfiles.conf
 
 Patch0001:        libreswan-3.25-relax-delete.patch
 Patch0002:        libreswan-3.25-unbound-hook.patch
+Patch0003:        0001-Replace-and-remove-deprecated-libselinux-functions.patch
+Patch0004:        0002-fixup-last-two-occurances-of-security_context_t.patch
 
 BuildRequires:    gcc pkgconfig hostname bison flex systemd-devel nss-devel >= 3.16.1
 BuildRequires:    nspr-devel pam-devel libevent-devel unbound-devel >= 1.6.0-6 ldns-devel
@@ -130,6 +132,9 @@ export NSS_DISABLE_HW_GCM=1
 %doc %{_mandir}/*/*
 
 %changelog
+* Tue Sep 22 2020 huanghaitao <huanghaitao8@huawei.com> - 3.26-8
+- Fix libselinux deprecates
+
 * Mon Sep 14 2020 Ge Wang <wangge20@huawei.com> - 3.25-7
 - Modify Source0 Url
 
