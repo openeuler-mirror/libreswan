@@ -1,0 +1,83 @@
+From 629e2b969c8646012e7e83844acd506ff5719a4e Mon Sep 17 00:00:00 2001
+From: Eduardo Barretto <eduardo.barretto@canonical.com>
+Date: Thu, 27 Aug 2020 10:26:01 -0400
+Subject: [PATCH] pluto: Replace/remove deprecated libselinux functions
+
+Signed-off-by: Paul Wouters <pwouters@redhat.com>
+---
+ contrib/labeled-ipsec/getpeercon_server.c | 4 ++--
+ programs/pluto/security_selinux.c         | 7 ++-----
+ programs/pluto/security_selinux.h         | 2 +-
+ 3 files changed, 5 insertions(+), 8 deletions(-)
+
+diff --git a/contrib/labeled-ipsec/getpeercon_server.c b/contrib/labeled-ipsec/getpeercon_server.c
+index 734c5f9d43..75d8301bd2 100644
+--- a/contrib/labeled-ipsec/getpeercon_server.c
++++ b/contrib/labeled-ipsec/getpeercon_server.c
+@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
+ 		srv_sock_path = argv[1];
+ 
+ 	{
+-		security_context_t ctx;
++		char *ctx;
+ 		int rc = getcon(&ctx);
+ 
+ 		fprintf(stderr, "-> running as %s\n",
+@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
+ 		struct sockaddr_in6 *const cli_sock_6addr = (struct sockaddr_in6 *)&cli_sock_saddr;
+ 		socklen_t cli_sock_addr_len;
+ 		char cli_sock_addr_str[INET6_ADDRSTRLEN + 1];
+-		security_context_t ctx;
++		char *ctx;
+ 		char *ctx_str;
+ 
+ 		//fflush(stdout);
+diff --git a/programs/pluto/security_selinux.c b/programs/pluto/security_selinux.c
+index 2b8e28d710..f97ac11576 100644
+--- a/programs/pluto/security_selinux.c
++++ b/programs/pluto/security_selinux.c
+@@ -30,13 +30,13 @@ void init_avc(void)
+ 		DBG_log("selinux support is enabled.");
+ 	}
+ 
+-	if (avc_init("libreswan", NULL, NULL, NULL, NULL) == 0)
++	if (avc_open(NULL, 0) == 0)
+ 		selinux_ready = 1;
+ 	else
+ 		DBG_log("selinux: could not initialize avc.");
+ }
+ 
+-int within_range(security_context_t sl, security_context_t range)
++int within_range(char *sl, security_context_t range)
+ {
+ 	int rtn = 1;
+ 	security_id_t slsid;
+@@ -62,7 +62,6 @@ int within_range(security_context_t sl, security_context_t range)
+ 	if (rtn != 0) {
+ 		DBG_log("within_range: Unable to retrieve sid for range context (%s)",
+ 			range);
+-		sidput(slsid);
+ 		return 0;
+ 	}
+ 
+@@ -74,8 +73,6 @@ int within_range(security_context_t sl, security_context_t range)
+ 	if (rtn != 0) {
+ 		DBG_log("within_range: The sl (%s) is not within range of (%s)", sl,
+ 			range);
+-		sidput(slsid);
+-		sidput(rangesid);
+ 		return 0;
+ 	}
+ 	DBG_log("within_range: The sl (%s) is within range of (%s)", sl,
+diff --git a/programs/pluto/security_selinux.h b/programs/pluto/security_selinux.h
+index 35978b1481..43c1dde68a 100644
+--- a/programs/pluto/security_selinux.h
++++ b/programs/pluto/security_selinux.h
+@@ -20,6 +20,6 @@
+ #include <selinux/context.h>
+ 
+ void init_avc(void);
+-int within_range(security_context_t sl, security_context_t range);
++int within_range(char *sl, security_context_t range);
+ 
+ #endif /* _SECURITY_SELINUX_H */
