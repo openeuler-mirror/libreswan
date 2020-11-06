@@ -20,7 +20,7 @@
 
 Name:             libreswan
 Version:          3.25
-Release:          8
+Release:          9
 Summary:          A free implementation of IPsec & IKE for Linux
 License:          GPLv2
 Url:              https://github.com/libreswan/libreswan
@@ -39,6 +39,7 @@ BuildRequires:    libseccomp-devel libselinux-devel fipscheck-devel audit-libs-d
 BuildRequires:    libcap-ng-devel openldap-devel curl-devel xmlto
 
 Requires:         fipscheck nss-tools nss-softokn iproute >= 2.6.8 unbound-libs >= 1.6.6
+Requires:         %{name}-help = %{version}-%{release}
 Requires(post):   bash coreutils systemd
 Requires(preun):  systemd
 Requires(postun): systemd
@@ -132,6 +133,9 @@ export NSS_DISABLE_HW_GCM=1
 %doc %{_mandir}/*/*
 
 %changelog
+* Thu Nov 05 2020 Ge Wang <wangge20@huawei.com> - 3.25-9
+- Set help package as libreswan package's install require
+
 * Tue Sep 22 2020 huanghaitao <huanghaitao8@huawei.com> - 3.25-8
 - Fix libselinux deprecates
 
