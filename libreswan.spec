@@ -26,7 +26,7 @@
 Name: libreswan
 Summary: IKE implementation for IPsec with IKEv1 and IKEv2 support
 Version: 4.1
-Release: 1
+Release: 2
 License: GPLv2
 Url: https://libreswan.org/
 Source0: https://download.libreswan.org/%{name}-%{version}.tar.gz
@@ -34,6 +34,8 @@ Source1: https://download.libreswan.org/cavs/ikev1_dsa.fax.bz2
 Source2: https://download.libreswan.org/cavs/ikev1_psk.fax.bz2
 Source3: https://download.libreswan.org/cavs/ikev2.fax.bz2
 Source4: openeuler-libreswan-sysctl.conf
+
+Patch0: fix-algparse-unknown-option-d.patch
 
 BuildRequires: audit-libs-devel
 BuildRequires: bison
@@ -92,6 +94,7 @@ Man pages and other related help documents for libreswan.
 
 %prep
 %setup -q -n libreswan-%{version}%{?prever}
+%patch0 -p1
 
 sed -i "s/-lfreebl //" mk/config.mk
 
@@ -186,6 +189,9 @@ certutil -N -d sql:$tmpdir --empty-password
 %attr(0644,root,root) %doc %{_mandir}/*/*
 
 %changelog
+* Wed Aug 11 2021 caodongxia <caodongxia@huawei.com> - 4.1-2
+- Fix algparse unknown option -d
+
 * Fri Dec 04 2020 lingsheng <lingsheng@huawei.com> - 4.1-1
 - Update to 4.1
 
