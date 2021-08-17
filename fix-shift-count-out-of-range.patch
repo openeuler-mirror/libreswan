@@ -1,0 +1,27 @@
+From b6e379ceb25e0b0eb852960a2fe9dcb95f85cff9 Mon Sep 17 00:00:00 2001
+From: caodongxia <315816521@qq.com>
+Date: Tue, 17 Aug 2021 09:34:25 +0800
+Subject: [PATCH] fix shift count out of range
+
+---
+ programs/auto/auto.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/programs/auto/auto.in b/programs/auto/auto.in
+index e69bf19..4111b53 100755
+--- a/programs/auto/auto.in
++++ b/programs/auto/auto.in
+@@ -113,7 +113,9 @@ do
+ 	    break
+ 	    ;;
+     esac
+-    shift
++    if [ $# -gt 0 ]; then
++      shift
++    fi
+ done
+ 
+ names=
+-- 
+2.27.0
+
