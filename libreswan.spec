@@ -18,14 +18,14 @@
     USE_LINUX_AUDIT=true \\\
     USE_NM=true \\\
     USE_SECCOMP=true \\\
-    USE_XAUTHPAM=true \\\
+    USE_AUTHPAM=true \\\
     USE_NSS_KDF=true \\\
 %{nil}
 
 
 Name: libreswan
 Summary: IKE implementation for IPsec with IKEv1 and IKEv2 support
-Version: 4.1
+Version: 4.5
 Release: 1
 License: GPLv2
 Url: https://libreswan.org/
@@ -177,6 +177,7 @@ certutil -N -d sql:$tmpdir --empty-password
 %attr(0644,root,root) %{_unitdir}/ipsec.service
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/pam.d/pluto
 %attr(0700,root,root) %dir %{_sharedstatedir}/ipsec/nss
+%config(noreplace) %{_sysconfdir}/logrotate.d/libreswan
 %{_sbindir}/ipsec
 %{_libexecdir}/ipsec
 
@@ -186,6 +187,9 @@ certutil -N -d sql:$tmpdir --empty-password
 %attr(0644,root,root) %doc %{_mandir}/*/*
 
 %changelog
+* Wed Jan 12 2022 caodongxia <caodongxia@huawei.com> - 4.5-1
+- Update to 4.5
+
 * Fri Dec 04 2020 lingsheng <lingsheng@huawei.com> - 4.1-1
 - Update to 4.1
 
