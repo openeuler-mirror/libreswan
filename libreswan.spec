@@ -18,15 +18,15 @@
     USE_LINUX_AUDIT=true \\\
     USE_NM=true \\\
     USE_SECCOMP=true \\\
-    USE_XAUTHPAM=true \\\
+    USE_AUTHPAM=true \\\
     USE_NSS_KDF=true \\\
 %{nil}
 
 
 Name: libreswan
 Summary: IKE implementation for IPsec with IKEv1 and IKEv2 support
-Version: 4.1
-Release: 2
+Version: 4.5
+Release: 1
 License: GPLv2
 Url: https://libreswan.org/
 Source0: https://download.libreswan.org/%{name}-%{version}.tar.gz
@@ -35,7 +35,6 @@ Source2: https://download.libreswan.org/cavs/ikev1_psk.fax.bz2
 Source3: https://download.libreswan.org/cavs/ikev2.fax.bz2
 Source4: openeuler-libreswan-sysctl.conf
 
-Patch0: fix-algparse-unknown-option-d.patch
 
 BuildRequires: audit-libs-devel
 BuildRequires: bison
@@ -94,7 +93,6 @@ Man pages and other related help documents for libreswan.
 
 %prep
 %setup -q -n libreswan-%{version}%{?prever}
-%patch0 -p1
 
 sed -i "s/-lfreebl //" mk/config.mk
 
@@ -180,6 +178,7 @@ certutil -N -d sql:$tmpdir --empty-password
 %attr(0644,root,root) %{_unitdir}/ipsec.service
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/pam.d/pluto
 %attr(0700,root,root) %dir %{_sharedstatedir}/ipsec/nss
+%config(noreplace) %{_sysconfdir}/logrotate.d/libreswan
 %{_sbindir}/ipsec
 %{_libexecdir}/ipsec
 
@@ -189,6 +188,9 @@ certutil -N -d sql:$tmpdir --empty-password
 %attr(0644,root,root) %doc %{_mandir}/*/*
 
 %changelog
+* Mon Apr 18 2022 yangping <yangping69@h-partners.com> - 4.5-1
+- Update to 4.5
+
 * Wed Aug 11 2021 caodongxia <caodongxia@huawei.com> - 4.1-2
 - Fix algparse unknown option -d
 
