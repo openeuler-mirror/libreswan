@@ -26,7 +26,7 @@
 Name: libreswan
 Summary: IKE implementation for IPsec with IKEv1 and IKEv2 support
 Version: 4.5
-Release: 2
+Release: 3
 License: GPLv2
 Url: https://libreswan.org/
 Source0: https://download.libreswan.org/%{name}-%{version}.tar.gz
@@ -36,6 +36,8 @@ Source3: https://download.libreswan.org/cavs/ikev2.fax.bz2
 Source4: openeuler-libreswan-sysctl.conf
 #https://libreswan.org/security/CVE-2022-23094/
 Patch0:  CVE-2022-23094.patch
+#https://libreswan.org/security/CVE-2023-23009/
+Patch1:  CVE-2023-23009.patch
 
 BuildRequires: audit-libs-devel
 BuildRequires: bison
@@ -189,6 +191,9 @@ certutil -N -d sql:$tmpdir --empty-password
 %attr(0644,root,root) %doc %{_mandir}/*/*
 
 %changelog
+* Tue Mar 07 2023 yaoxin <yaoxin30@h-partners.com> - 4.5-3
+- Fix CVE-2023-23009
+
 * Tue Jun 28 2022 yaoxin <yaoxin30@h-partners.com> - 4.5-2
 - Fix CVE-2022-23094
 
