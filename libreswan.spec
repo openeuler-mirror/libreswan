@@ -26,7 +26,7 @@
 Name: libreswan
 Summary: IKE implementation for IPsec with IKEv1 and IKEv2 support
 Version: 4.5
-Release: 3
+Release: 4
 License: GPLv2
 Url: https://libreswan.org/
 Source0: https://download.libreswan.org/%{name}-%{version}.tar.gz
@@ -109,10 +109,18 @@ sed -i '/config setup/a\\t# Specifies a directory forNSS database files\n\tnssdi
 sed -i '/ipsec --checknss/s/$/ --nssdir \/etc\/ipsec.d/' ./initsystems/systemd/ipsec.service.in
 
 %build
+%if "%toolchain" == "clang"
+    WERROR_CFLAGS="-Werror -Wno-missing-field-initializers -Wno-error=deprecated-non-prototype -Wno-error=format-nonliteral -Wno-error=unused-but-set-variable"
+    USERLINK="-Wl,-z,relro -Wl,--as-needed  -Wl,-z,now -flto -fno-lto"
+%else
+    WERROR_CFLAGS="-Werror -Wno-missing-field-initializers -Wno-lto-type-mismatch -Wno-maybe-uninitialized"
+    USERLINK="-Wl,-z,relro -Wl,--as-needed  -Wl,-z,now -flto --no-lto"
+%endif
+
 make %{?_smp_mflags} \
     OPTIMIZE_CFLAGS="%{optflags}" \
-    WERROR_CFLAGS="-Werror -Wno-missing-field-initializers -Wno-lto-type-mismatch -Wno-maybe-uninitialized" \
-    USERLINK="-Wl,-z,relro -Wl,--as-needed  -Wl,-z,now -flto --no-lto" \
+    WERROR_CFLAGS="$WERROR_CFLAGS" \
+    USERLINK="$USERLINK" \
     %{libreswan_config} \
     programs
 FS=$(pwd)
@@ -192,6 +200,9 @@ certutil -N -d sql:$tmpdir --empty-password
 %attr(0644,root,root) %doc %{_mandir}/*/*
 
 %changelog
+* Thu Apr 27 2023 Xiaoya Huang <huangxiaoya@iscas.ac.cn> - 4.5-4
+- Fix CC compiler support and CFLAGS, USERLINK errors
+
 * Tue Mar 07 2023 yaoxin <yaoxin30@h-partners.com> - 4.5-3
 - Fix CVE-2023-23009
 
